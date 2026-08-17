@@ -15,7 +15,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
       className="group rounded-2xl overflow-hidden border block nk-fade-in"
       style={{ background: "var(--nk-card-bg)", borderColor: "var(--nk-border)" }}
     >
-      <RecipeCover category={recipe.category} className="h-36 w-full" />
+      <RecipeCover category={recipe.category} title={recipe.title} className="h-36 w-full" />
       <div className="p-4">
         <h3 className="font-display text-lg leading-snug mb-1 group-hover:opacity-80">{recipe.title}</h3>
         <p className="text-xs mb-3 line-clamp-2" style={{ color: "var(--nk-fg-soft)" }}>{recipe.description}</p>
