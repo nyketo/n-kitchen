@@ -24,7 +24,7 @@ export default function HomePage() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
       <p className="text-sm mb-1" style={{ color: "var(--nk-fg-soft)" }}>Днес в N Kitchen</p>
       <div className="rounded-3xl overflow-hidden border grid md:grid-cols-2" style={{ borderColor: "var(--nk-border)" }}>
-        <RecipeCover category={recipe.category} className="h-56 md:h-full" />
+        <RecipeCover category={recipe.category} title={recipe.title} className="h-56 md:h-full" />
         <div className="p-6 md:p-8 flex flex-col justify-center" style={{ background: "var(--nk-card-bg)" }}>
           <h1 className="font-display text-3xl md:text-4xl leading-tight mb-3">{recipe.title}</h1>
           <div className="flex flex-wrap gap-1.5 text-[11px] mb-4">
