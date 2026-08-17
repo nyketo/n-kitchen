@@ -1,0 +1,120 @@
+import { ing, step, recipe } from "../builder";
+import type { Recipe } from "@/lib/types";
+
+export const chicken2Recipes: Recipe[] = [
+  recipe({
+    id: "chicken-drumsticks-oven-paprika",
+    title: "Пилешки бутчета на фурна с червен пипер",
+    description: "Хрупкава коричка, сочно месо, минимална подготовка.",
+    category: "chicken", cuisine: "bg", dietType: ["keto", "low-carb"],
+    ingredients: [ing("chicken-thigh", 500, "g", "бутчета с кожа"), ing("olive-oil", 20, "ml"), ing("paprika", 1), ing("garlic", 3, "pcs"), ing("salt", 6)],
+    servingsBase: 2,
+    methods: [{
+      method: "oven", isBestResult: true, prepTime: 8, activeTime: 5, cookTime: 40,
+      ovenSettings: { tempC: 200, fan: true, preheat: true, covered: false },
+      steps: [
+        step("Разтрий бутчетата с олио, паприка, чесън и сол."),
+        step("Подреди на тава с кожата нагоре."),
+        step("Печи 40 мин на 200°C до хрупкава кожа.", { appliance: "oven", minutes: 40, tempC: 200 }),
+      ],
+      internalTempC: 74,
+    }],
+    difficulty: "easy", cleanupLevel: "minimal", season: "all", dairyFree: true, omadCompatible: true,
+    tags: ["chicken", "oven"], image: "chicken-drumsticks-oven",
+  }),
+  recipe({
+    id: "chicken-wings-grill-spicy",
+    title: "Пилешки крилца на грил с пиперонки",
+    description: "Пикантен вариант за лятна вечеря на двора.",
+    category: "chicken", cuisine: "bg", dietType: ["keto", "low-carb"],
+    ingredients: [ing("chicken-wing", 450), ing("olive-oil", 15, "ml"), ing("pickled-pepper", 30), ing("garlic", 2, "pcs"), ing("salt", 5)],
+    servingsBase: 1,
+    methods: [{
+      method: "grill", prepTime: 20, activeTime: 10, cookTime: 18,
+      grillSettings: { heat: "среден", minutesPerSide: 9 },
+      steps: [
+        step("Маринова крилцата 20 мин с олио, накълцани пиперонки, чесън и сол."),
+        step("Изпечи на среден грил по 9 мин от всяка страна.", { appliance: "grill", minutes: 9 }),
+      ],
+      internalTempC: 74,
+    }],
+    difficulty: "easy", cleanupLevel: "minimal", season: "summer", dairyFree: true, omadCompatible: true,
+    tags: ["chicken", "grill", "spicy"], image: "chicken-wings-grill",
+  }),
+  recipe({
+    id: "chicken-thigh-cabbage-sauerkraut",
+    title: "Пилешко с кисело зеле на тиган",
+    description: "По-кисела и ароматна версия на пилешко със зеле.",
+    category: "chicken", cuisine: "bg", dietType: ["keto", "low-carb"],
+    ingredients: [ing("chicken-thigh", 400), ing("sauerkraut", 300), ing("ghee", 15), ing("allspice", 1), ing("salt", 3)],
+    servingsBase: 1,
+    methods: [{
+      method: "stovetop", prepTime: 8, activeTime: 15, cookTime: 30,
+      hobSettings: { power: "средно-силен, после слаб огън ≈ 6→3/9" },
+      steps: [
+        step("Запечи пилешкото в гхи 6 мин.", { appliance: "stovetop", minutes: 6 }),
+        step("Добави киселото зеле, бахар и 80 ml вода."),
+        step("Покрий и задушавай 25 мин на слаб огън.", { appliance: "stovetop", minutes: 25 }),
+      ],
+    }],
+    difficulty: "easy", cleanupLevel: "normal", season: "winter", dairyFree: true, omadCompatible: true,
+    tags: ["chicken", "cabbage", "bulgarian", "stovetop"], image: "chicken-sauerkraut",
+  }),
+  recipe({
+    id: "chicken-breast-grill-simple",
+    title: "Пилешко филе на грил",
+    description: "Проста и здравословна опция за всеки ден.",
+    category: "chicken", cuisine: "international", dietType: ["keto", "low-carb"],
+    ingredients: [ing("chicken-breast", 300), ing("olive-oil", 10, "ml"), ing("salt", 4), ing("black-pepper", 1)],
+    servingsBase: 1,
+    methods: [{
+      method: "grill", prepTime: 5, activeTime: 10, cookTime: 12,
+      grillSettings: { heat: "среден", minutesPerSide: 6, thicknessNote: "~2 см" },
+      steps: [
+        step("Намажи филето с олио, сол и пипер."),
+        step("Изпечи на среден грил по 6 мин от всяка страна.", { appliance: "grill", minutes: 6 }),
+      ],
+      internalTempC: 74,
+    }],
+    difficulty: "easy", cleanupLevel: "minimal", season: "summer", dairyFree: true, omadCompatible: true,
+    tags: ["chicken", "grill", "quick"], image: "chicken-breast-grill",
+  }),
+  recipe({
+    id: "chicken-whole-cook4me-parts",
+    title: "Пилешки части в Cook4me с чушки",
+    description: "Бърз вариант с нарязано на части пиле.",
+    category: "chicken", cuisine: "bg", dietType: ["keto", "low-carb"],
+    ingredients: [ing("chicken-thigh", 500, "g", "части с кожа"), ing("pepper", 2, "pcs"), ing("tomato-fresh", 150), ing("ghee", 15), ing("salt", 6)],
+    servingsBase: 2,
+    methods: [{
+      method: "cook4me", isBestResult: true, prepTime: 10, activeTime: 8, cookTime: 18,
+      steps: [
+        step("Добави гхи, запичане с отворен капак.", { appliance: "cook4me" }),
+        step("Запечи пилешките части 5 мин.", { appliance: "cook4me", minutes: 5 }),
+        step("Добави чушките и пасираните домати, сол."),
+        step("Затвори капака, Pressure Cooking 10 мин.", { appliance: "cook4me", minutes: 10 }),
+      ],
+    }],
+    difficulty: "easy", cleanupLevel: "minimal", season: "summer", dairyFree: true, omadCompatible: true,
+    tags: ["chicken", "cook4me", "bulgarian"], image: "chicken-parts-cook4me",
+  }),
+  recipe({
+    id: "chicken-thigh-airfryer-rosemary",
+    title: "Пилешко бонфиле в Air Fryer с розмарин",
+    description: "Хрупкава коричка без много мазнина.",
+    category: "chicken", cuisine: "international", dietType: ["keto", "low-carb"],
+    ingredients: [ing("chicken-thigh", 400), ing("olive-oil", 12, "ml"), ing("rosemary", 1), ing("salt", 5)],
+    servingsBase: 1,
+    methods: [{
+      method: "airfryer", prepTime: 5, activeTime: 2, cookTime: 18,
+      airfryerSettings: { tempC: 195, minutes: 18, preheat: true, shake: false },
+      steps: [
+        step("Намажи бонфилетата с олио, розмарин и сол."),
+        step("Печи в Air Fryer на 195°C, обръщайки по средата.", { appliance: "airfryer", minutes: 18, tempC: 195 }),
+      ],
+      internalTempC: 74,
+    }],
+    difficulty: "easy", cleanupLevel: "minimal", season: "all", dairyFree: true, omadCompatible: true,
+    tags: ["chicken", "airfryer"], image: "chicken-thigh-airfryer-rosemary",
+  }),
+];
