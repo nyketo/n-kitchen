@@ -1,0 +1,16 @@
+{
+  "name": "N Kitchen",
+  "short_name": "N Kitchen",
+  "description": "Личната дигитална кухня, готварска книга и AI кухненски помощник.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F6F1E7",
+  "theme_color": "#B5502D",
+  "orientation": "any",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
