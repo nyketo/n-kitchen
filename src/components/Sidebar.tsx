@@ -8,13 +8,17 @@ const NAV = [
   { href: "/", label: "Начало", icon: "⌂" },
   { href: "/recipes", label: "Рецепти", icon: "▤" },
   { href: "/cook4me", label: "Cook4me", icon: "◍" },
-  { href: "/quick", label: "Набързо", icon: "⚡" },
+  // ︎ forces the plain monochrome glyph instead of a colorful emoji
+  // rendering on iOS/Safari for symbols that have an emoji-by-default
+  // presentation (⚡ ☁ ✳ would otherwise show as colored emoji, breaking
+  // the thin-line icon look of the rest of the nav).
+  { href: "/quick", label: "Набързо", icon: "⚡︎" },
   { href: "/weekly-menu", label: "Седмично меню", icon: "▦" },
   { href: "/fridge", label: "Моят хладилник", icon: "▢" },
   { href: "/shopping", label: "Пазаруване", icon: "☰" },
   { href: "/favorites", label: "Любими", icon: "♥" },
-  { href: "/chef", label: "Моят готвач", icon: "✳" },
-  { href: "/account", label: "Профил", icon: "☁" },
+  { href: "/chef", label: "Моят готвач", icon: "✳︎" },
+  { href: "/account", label: "Профил", icon: "☁︎" },
   { href: "/settings", label: "Настройки", icon: "⚙" },
 ];
 
