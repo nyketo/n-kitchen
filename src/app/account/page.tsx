@@ -107,7 +107,7 @@ export default function AccountPage() {
 
       {!user && step === "enterEmail" && (
         <div className="rounded-2xl border p-4" style={{ borderColor: "var(--nk-border)", background: "var(--nk-card-bg)" }}>
-          <p className="text-sm mb-3">Влез с имейл — ще ти изпратим 6-цифрен код, без парола.</p>
+          <p className="text-sm mb-3">Влез с имейл — ще ти изпратим код за вход, без парола.</p>
           <div className="flex gap-2 mb-2">
             <input
               value={email}
@@ -137,7 +137,7 @@ export default function AccountPage() {
       {!user && step === "enterCode" && (
         <div className="rounded-2xl border p-4" style={{ borderColor: "var(--nk-border)", background: "var(--nk-card-bg)" }}>
           <p className="text-sm mb-1">
-            ✓ Изпратихме 6-цифрен код на <strong>{email}</strong>
+            ✓ Изпратихме код за вход на <strong>{email}</strong>
           </p>
           <p className="text-xs mb-3" style={{ color: "var(--nk-fg-soft)" }}>
             Отвори пощата си и въведи кода тук долу — не е нужно да отваряш никакъв линк или друго приложение.
@@ -145,16 +145,16 @@ export default function AccountPage() {
           <div className="flex gap-2 mb-2">
             <input
               value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 10))}
               inputMode="numeric"
               autoComplete="one-time-code"
-              placeholder="123456"
+              placeholder="код от имейла"
               className="flex-1 rounded-lg border px-3 py-2 text-sm tracking-[0.3em] text-center font-semibold"
               style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}
             />
             <button
               onClick={confirmCode}
-              disabled={status === "verifying" || code.trim().length < 6}
+              disabled={status === "verifying" || code.trim().length < 4}
               className="px-4 py-2 rounded-lg text-sm font-semibold"
               style={{ background: "var(--nk-olive)", color: "#FBF3E7" }}
             >
