@@ -11,6 +11,7 @@ import { CATEGORY_LABELS, METHOD_LABELS } from "@/lib/labels";
 import { db } from "@/lib/db";
 import {
   recipeScaledNutrition, scaleIngredients, makeOmadIngredients, nutritionForIngredients,
+  makeKetoAdaptedIngredients, isKetoFriendly, recipePerServing,
 } from "@/lib/nutrition";
 
 export default function RecipeDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -18,6 +19,7 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
   const recipe = getRecipeById(id);
   const [multiplier, setMultiplier] = useState(1);
   const [omad, setOmad] = useState(false);
+  const [ketoAdapt, setKetoAdapt] = useState(false);
   const [methodIdx, setMethodIdx] = useState(0);
 
   const isFavorite = useLiveQuery(() => db.favorites.get(id), [id]);
@@ -28,12 +30,18 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
   const displayedIngredients = useMemo(() => {
     if (!recipe) return [];
     if (omad) return makeOmadIngredients(recipe);
-    return scaleIngredients(recipe.ingredients, multiplier);
-  }, [recipe, multiplier, omad]);
+    const base = ketoAdapt ? makeKetoAdaptedIngredients(recipe) : recipe.ingredients;
+    return scaleIngredients(base, multiplier);
+  }, [recipe, multiplier, omad, ketoAdapt]);
 
   if (!recipe) return notFound();
 
-  const nutrition = omad ? nutritionForIngredients(displayedIngredients) : recipeScaledNutrition(recipe, multiplier);
+  const ketoFriendly = isKetoFriendly(recipe);
+  const nutrition = omad
+    ? nutritionForIngredients(displayedIngredients)
+    : ketoAdapt
+      ? nutritionForIngredients(displayedIngredients)
+      : recipeScaledNutrition(recipe, multiplier);
   const method = recipe.methods[methodIdx];
 
   async function toggleFavorite() {
@@ -77,11 +85,38 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
 
       <div className="flex flex-wrap gap-1.5 text-[11px] mb-6">
         <Badge>{CATEGORY_LABELS[recipe.category]}</Badge>
-        {recipe.dietType.map((d) => <Badge key={d} accent>{d === "keto" ? "KETO" : "LOW-CARB"}</Badge>)}
+        {recipe.dietType.includes("keto") && <Badge accent>{ketoFriendly ? "KETO" : "LOW-CARB"}</Badge>}
+        {!recipe.dietType.includes("keto") && recipe.dietType.includes("low-carb") && <Badge accent>LOW-CARB</Badge>}
         {recipe.dairyFree && <Badge>БЕЗ МЛЕЧНИ</Badge>}
         {!recipe.dairyFree && <Badge>СЪДЪРЖА МЛЕЧНИ</Badge>}
         {recipe.omadCompatible && <Badge>OMAD подходящо</Badge>}
       </div>
+
+      {!ketoFriendly && !ketoAdapt && !omad && (
+        <div className="mb-4 rounded-xl border px-4 py-3 text-xs flex items-center justify-between gap-3"
+          style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}>
+          <span>
+            При тези количества нетните въглехидрати са {recipePerServing(recipe).netCarbs} г на порция — над обичайния кето лимит.
+          </span>
+          <button onClick={() => { setKetoAdapt(true); setOmad(false); }}
+            className="px-3 py-1.5 rounded-full font-semibold shrink-0"
+            style={{ background: "var(--nk-olive)", color: "#FBF3E7" }}>
+            АДАПТИРАЙ КЪМ КЕТО
+          </button>
+        </div>
+      )}
+      {ketoAdapt && (
+        <div className="mb-4 rounded-xl border px-4 py-3 text-xs flex items-center justify-between gap-3"
+          style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}>
+          <span>
+            ✓ Адаптирано — намалени зеленчуци, сега {nutrition.netCarbs} г нетни въглехидрати на порция.
+          </span>
+          <button onClick={() => setKetoAdapt(false)}
+            className="px-3 py-1.5 rounded-full border shrink-0" style={{ borderColor: "var(--nk-border)" }}>
+            Върни оригинала
+          </button>
+        </div>
+      )}
 
       <div className="flex items-center justify-between mb-4">
         <Link
@@ -107,7 +142,7 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
       </div>
 
       {recipe.omadCompatible && (
-        <button onClick={() => setOmad((v) => !v)}
+        <button onClick={() => { setOmad((v) => !v); setKetoAdapt(false); }}
           className="mb-6 px-4 py-2 rounded-full text-xs font-semibold border"
           style={{
             borderColor: "var(--nk-border)",
