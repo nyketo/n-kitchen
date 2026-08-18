@@ -7,8 +7,10 @@ import { initialMerge, pushAll } from "@/lib/sync";
 
 export default function AccountPage() {
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
   const [user, setUser] = useState<User | null>(null);
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [step, setStep] = useState<"enterEmail" | "enterCode">("enterEmail");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error" | "verifying" | "codeError">("idle");
   const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "done" | "error">("idle");
   const [loadingUser, setLoadingUser] = useState(true);
 
@@ -27,18 +29,49 @@ export default function AccountPage() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  async function sendMagicLink() {
+  // Sends a one-time 6-digit code by email. We deliberately verify it in-place
+  // with verifyOtp() below rather than relying on the email's link: on iPhone,
+  // tapping a link opens whatever browser is set as default (often not the
+  // one N Kitchen is installed/running in, especially as a home-screen app),
+  // so the sign-in would "complete" in the wrong app and this app would stay
+  // signed out. Typing the code back into the same app avoids that entirely.
+  async function sendCode() {
     if (!supabase || !email.trim()) return;
     setStatus("sending");
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: typeof window !== "undefined" ? window.location.origin + "/account" : undefined },
+      options: { shouldCreateUser: true },
     });
-    setStatus(error ? "error" : "sent");
+    if (error) {
+      setStatus("error");
+      return;
+    }
+    setStatus("sent");
+    setStep("enterCode");
+  }
+
+  async function confirmCode() {
+    if (!supabase || !code.trim()) return;
+    setStatus("verifying");
+    const { error } = await supabase.auth.verifyOtp({
+      email: email.trim(),
+      token: code.trim(),
+      type: "email",
+    });
+    if (error) {
+      setStatus("codeError");
+      return;
+    }
+    setStatus("idle");
+    setCode("");
   }
 
   async function signOut() {
     await supabase?.auth.signOut();
+    setStep("enterEmail");
+    setStatus("idle");
+    setEmail("");
+    setCode("");
   }
 
   async function syncNow() {
@@ -72,9 +105,9 @@ export default function AccountPage() {
         По желание — за достъп до твоите рецепти, любими и бележки от повече от едно устройство. Без вход всичко продължава да работи офлайн, само на това устройство.
       </p>
 
-      {!user && (
+      {!user && step === "enterEmail" && (
         <div className="rounded-2xl border p-4" style={{ borderColor: "var(--nk-border)", background: "var(--nk-card-bg)" }}>
-          <p className="text-sm mb-3">Влез с имейл — ще ти изпратим линк, без парола.</p>
+          <p className="text-sm mb-3">Влез с имейл — ще ти изпратим 6-цифрен код, без парола.</p>
           <div className="flex gap-2 mb-2">
             <input
               value={email}
@@ -85,24 +118,61 @@ export default function AccountPage() {
               style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}
             />
             <button
-              onClick={sendMagicLink}
+              onClick={sendCode}
               disabled={status === "sending" || !email.trim()}
               className="px-4 py-2 rounded-lg text-sm font-semibold"
               style={{ background: "var(--nk-ember)", color: "#FBF3E7" }}
             >
-              Изпрати линк
+              Изпрати код
             </button>
           </div>
-          {status === "sent" && (
-            <p className="text-xs" style={{ color: "var(--nk-olive)" }}>
-              ✓ Провери пощата си ({email}) и натисни линка в имейла — той ще те върне тук вече вписан.
-            </p>
-          )}
           {status === "error" && (
             <p className="text-xs" style={{ color: "var(--nk-danger)" }}>
               Нещо се обърка при изпращането. Провери дали имейлът е верен и опитай отново.
             </p>
           )}
+        </div>
+      )}
+
+      {!user && step === "enterCode" && (
+        <div className="rounded-2xl border p-4" style={{ borderColor: "var(--nk-border)", background: "var(--nk-card-bg)" }}>
+          <p className="text-sm mb-1">
+            ✓ Изпратихме 6-цифрен код на <strong>{email}</strong>
+          </p>
+          <p className="text-xs mb-3" style={{ color: "var(--nk-fg-soft)" }}>
+            Отвори пощата си и въведи кода тук долу — не е нужно да отваряш никакъв линк или друго приложение.
+          </p>
+          <div className="flex gap-2 mb-2">
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              placeholder="123456"
+              className="flex-1 rounded-lg border px-3 py-2 text-sm tracking-[0.3em] text-center font-semibold"
+              style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}
+            />
+            <button
+              onClick={confirmCode}
+              disabled={status === "verifying" || code.trim().length < 6}
+              className="px-4 py-2 rounded-lg text-sm font-semibold"
+              style={{ background: "var(--nk-olive)", color: "#FBF3E7" }}
+            >
+              Потвърди
+            </button>
+          </div>
+          {status === "codeError" && (
+            <p className="text-xs mb-2" style={{ color: "var(--nk-danger)" }}>
+              Кодът е грешен или изтекъл. Провери го отново или поискай нов.
+            </p>
+          )}
+          <button
+            onClick={() => { setStep("enterEmail"); setStatus("idle"); setCode(""); }}
+            className="text-xs underline"
+            style={{ color: "var(--nk-fg-soft)" }}
+          >
+            Промени имейла или изпрати нов код
+          </button>
         </div>
       )}
 
