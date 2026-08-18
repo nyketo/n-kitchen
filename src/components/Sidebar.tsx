@@ -4,21 +4,22 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
+// A handful of Unicode symbols (⚡ ☁ ✳) render as colorful emoji on iOS
+// regardless of text-presentation hints, breaking the thin-line icon look
+// of the rest of the nav. Those three use small inline SVGs instead —
+// guaranteed monochrome on every platform. Everything else keeps using a
+// plain text glyph, since those render consistently fine.
 const NAV = [
   { href: "/", label: "Начало", icon: "⌂" },
   { href: "/recipes", label: "Рецепти", icon: "▤" },
   { href: "/cook4me", label: "Cook4me", icon: "◍" },
-  // ︎ forces the plain monochrome glyph instead of a colorful emoji
-  // rendering on iOS/Safari for symbols that have an emoji-by-default
-  // presentation (⚡ ☁ ✳ would otherwise show as colored emoji, breaking
-  // the thin-line icon look of the rest of the nav).
-  { href: "/quick", label: "Набързо", icon: "⚡︎" },
+  { href: "/quick", label: "Набързо", icon: <BoltIcon /> },
   { href: "/weekly-menu", label: "Седмично меню", icon: "▦" },
   { href: "/fridge", label: "Моят хладилник", icon: "▢" },
   { href: "/shopping", label: "Пазаруване", icon: "☰" },
   { href: "/favorites", label: "Любими", icon: "♥" },
-  { href: "/chef", label: "Моят готвач", icon: "✳︎" },
-  { href: "/account", label: "Профил", icon: "☁︎" },
+  { href: "/chef", label: "Моят готвач", icon: <SparkleIcon /> },
+  { href: "/account", label: "Профил", icon: <CloudIcon /> },
   { href: "/settings", label: "Настройки", icon: "⚙" },
 ];
 
@@ -140,6 +141,30 @@ function NavLink({ item, active }: { item: (typeof NAV)[number]; active: boolean
       <span className="w-5 text-center" style={{ opacity: 0.85 }}>{item.icon}</span>
       {item.label}
     </Link>
+  );
+}
+
+export function BoltIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" />
+    </svg>
+  );
+}
+
+export function CloudIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M7 18h10a4 4 0 0 0 .5-7.97 5.5 5.5 0 0 0-10.6-1.5A4.5 4.5 0 0 0 7 18Z" />
+    </svg>
+  );
+}
+
+export function SparkleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2c.6 3.6 2 6.4 4 8.2 2 1.8 4.6 2.8 8 3-3.4.2-6 1.2-8 3-2 1.8-3.4 4.6-4 8.2-.6-3.6-2-6.4-4-8.2-2-1.8-4.6-2.8-8-3 3.4-.2 6-1.2 8-3 2-1.8 3.4-4.6 4-8.2Z" />
+    </svg>
   );
 }
 
