@@ -118,7 +118,7 @@ export const INGREDIENTS: Ingredient[] = [
   { id: "salt", name_bg: "Сол", category: "spice", unit: "g", kcal: 0, protein: 0, fat: 0, carbs: 0, fiber: 0 },
   { id: "black-pepper", name_bg: "Черен пипер", category: "spice", unit: "g", kcal: 251, protein: 10.4, fat: 3.3, carbs: 64, fiber: 25.3 },
   { id: "paprika", name_bg: "Червен пипер", category: "spice", unit: "g", kcal: 282, protein: 14.1, fat: 12.9, carbs: 54, fiber: 34.9 },
-  { id: "bay-leaf", name_bg: "Дафинов лист", category: "spice", unit: "g", kcal: 313, protein: 7.6, fat: 8.4, carbs: 75, fiber: 26.3 },
+  { id: "bay-leaf", name_bg: "Дафинов лист", category: "spice", unit: "g", kcal: 313, protein: 7.6, fat: 8.4, carbs: 75, fiber: 26.3, pieceGrams: 0.3 },
   { id: "allspice", name_bg: "Бахар", category: "spice", unit: "g", kcal: 263, protein: 6.1, fat: 8.7, carbs: 72.1, fiber: 21.6 },
   { id: "rosemary", name_bg: "Розмарин", category: "spice", unit: "g", kcal: 331, protein: 4.9, fat: 15.2, carbs: 64, fiber: 42.6 },
   { id: "savory", name_bg: "Чубрица", category: "spice", unit: "g", kcal: 272, protein: 6.7, fat: 5.9, carbs: 68.7, fiber: 45.7 },
