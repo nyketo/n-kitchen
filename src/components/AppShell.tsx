@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
+import SyncEngine from "./SyncEngine";
 import { ensurePantry, ensurePreferences } from "@/lib/db";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
@@ -22,6 +23,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen" style={{ background: "var(--nk-bg)" }}>
+      <SyncEngine />
       <Sidebar />
       <main className="flex-1 min-w-0 nk-scrollbar pb-24 md:pb-0">
         {ready ? children : <div className="p-8 text-sm" style={{ color: "var(--nk-fg-soft)" }}>N Kitchen се зарежда…</div>}
