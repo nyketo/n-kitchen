@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
 import { ALL_RECIPES } from "@/data/recipes";
 
-interface ChatMsg { role: "user" | "assistant" | "system"; text: string; }
+interface ChatMsg { role: "user" | "assistant" | "system"; text: string; prompt?: string; saved?: boolean; }
 
 export default function ChefPage() {
   const prefs = useLiveQuery(() => db.preferences.toCollection().first(), []);
   const fridge = useLiveQuery(() => db.fridge.toArray(), []) ?? [];
   const usageRows = useLiveQuery(() => db.aiUsage.toArray(), []) ?? [];
+  const savedCount = useLiveQuery(() => db.savedAiRecipes.count(), []) ?? 0;
   const month = new Date().toISOString().slice(0, 7);
   const usedThisMonth = usageRows.filter((u) => u.month === month).reduce((s, u) => s + u.costEUR, 0);
   const budget = prefs?.aiBudgetEUR ?? 3;
@@ -46,7 +48,7 @@ export default function ChefPage() {
       if (!res.ok) {
         setMessages((m) => [...m, { role: "system", text: data.message ?? "AI не е достъпен в момента." }]);
       } else {
-        setMessages((m) => [...m, { role: "assistant", text: data.reply }]);
+        setMessages((m) => [...m, { role: "assistant", text: data.reply, prompt }]);
         await db.aiUsage.add({ month, costEUR: data.usage?.estCostEUR ?? 0, requests: 1 });
       }
     } catch {
@@ -56,9 +58,25 @@ export default function ChefPage() {
     }
   }
 
+  async function saveMessage(index: number) {
+    const msg = messages[index];
+    if (msg.role !== "assistant") return;
+    const title = (msg.prompt ?? msg.text).slice(0, 60);
+    // Timestamping on user-initiated save (click handler), not during render — safe impurity.
+    // eslint-disable-next-line react-hooks/purity
+    const createdAt = Date.now();
+    await db.savedAiRecipes.add({ title, prompt: msg.prompt ?? "", text: msg.text, createdAt });
+    setMessages((m) => m.map((mm, i) => (i === index ? { ...mm, saved: true } : mm)));
+  }
+
   return (
     <div className="p-4 md:p-8 max-w-3xl mx-auto flex flex-col h-[calc(100vh-2rem)] md:h-screen">
-      <h1 className="font-display text-3xl mb-1">Моят готвач</h1>
+      <div className="flex items-start justify-between gap-3 mb-1">
+        <h1 className="font-display text-3xl">Моят готвач</h1>
+        <Link href="/chef/saved" className="text-xs px-3 py-2 rounded-full border shrink-0" style={{ borderColor: "var(--nk-border)" }}>
+          Запазени ({savedCount})
+        </Link>
+      </div>
       <p className="text-xs mb-4" style={{ color: "var(--nk-fg-soft)" }}>
         AI usage this month: €{usedThisMonth.toFixed(2)} / €{budget.toFixed(2)}
         {overBudget && " — лимитът е достигнат"}
@@ -66,14 +84,25 @@ export default function ChefPage() {
 
       <div className="flex-1 overflow-y-auto nk-scrollbar space-y-3 mb-4">
         {messages.map((m, i) => (
-          <div key={i} className="text-sm rounded-2xl px-4 py-3 max-w-[85%]"
-            style={{
-              marginLeft: m.role === "user" ? "auto" : 0,
-              background: m.role === "user" ? "var(--nk-ember)" : m.role === "system" ? "var(--nk-bg-2)" : "var(--nk-card-bg)",
-              color: m.role === "user" ? "#FBF3E7" : "var(--nk-fg)",
-              border: m.role !== "user" ? "1px solid var(--nk-border)" : undefined,
-            }}>
-            {m.text}
+          <div key={i} className="max-w-[85%]" style={{ marginLeft: m.role === "user" ? "auto" : 0 }}>
+            <div className="text-sm rounded-2xl px-4 py-3"
+              style={{
+                background: m.role === "user" ? "var(--nk-ember)" : m.role === "system" ? "var(--nk-bg-2)" : "var(--nk-card-bg)",
+                color: m.role === "user" ? "#FBF3E7" : "var(--nk-fg)",
+                border: m.role !== "user" ? "1px solid var(--nk-border)" : undefined,
+              }}>
+              {m.text}
+            </div>
+            {m.role === "assistant" && (
+              <button
+                onClick={() => saveMessage(i)}
+                disabled={m.saved}
+                className="mt-1.5 text-xs px-3 py-1.5 rounded-full border"
+                style={{ borderColor: "var(--nk-border)", color: m.saved ? "var(--nk-olive)" : "var(--nk-fg-soft)" }}
+              >
+                {m.saved ? "✓ Запазено" : "Запази като моя рецепта"}
+              </button>
+            )}
           </div>
         ))}
         {loading && <div className="text-xs" style={{ color: "var(--nk-fg-soft)" }}>Моят готвач мисли…</div>}
