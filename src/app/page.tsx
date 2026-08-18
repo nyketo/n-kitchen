@@ -6,6 +6,7 @@ import { ALL_RECIPES } from "@/data/recipes";
 import RecipeCover from "@/components/RecipeCover";
 import { recipePerServing } from "@/lib/nutrition";
 import { METHOD_LABELS } from "@/lib/labels";
+import { BoltIcon, SparkleIcon } from "@/components/Sidebar";
 
 function dayIndex(offset = 0) {
   const start = new Date(2026, 0, 1).getTime();
@@ -65,18 +66,18 @@ export default function HomePage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
         <QuickLink href="/recipes" title="Какво да сготвя?" icon="▤" />
         <QuickLink href="/cook4me" title="Cook4me" icon="◍" />
-        <QuickLink href="/quick" title="Нещо набързо" icon="⚡︎" />
+        <QuickLink href="/quick" title="Нещо набързо" icon={<BoltIcon />} />
         <QuickLink href="/fridge" title="Моят хладилник" icon="▢" />
         <QuickLink href="/weekly-menu" title="Седмично меню" icon="▦" />
         <QuickLink href="/favorites" title="Любими" icon="♥" />
         <QuickLink href="/shopping" title="Пазаруване" icon="☰" />
-        <QuickLink href="/chef" title="Моят готвач" icon="✳︎" />
+        <QuickLink href="/chef" title="Моят готвач" icon={<SparkleIcon />} />
       </div>
     </div>
   );
 }
 
-function QuickLink({ href, title, icon }: { href: string; title: string; icon: string }) {
+function QuickLink({ href, title, icon }: { href: string; title: string; icon: React.ReactNode }) {
   return (
     <Link
       href={href}
