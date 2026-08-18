@@ -65,12 +65,12 @@ export default function HomePage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
         <QuickLink href="/recipes" title="Какво да сготвя?" icon="▤" />
         <QuickLink href="/cook4me" title="Cook4me" icon="◍" />
-        <QuickLink href="/quick" title="Нещо набързо" icon="⚡" />
+        <QuickLink href="/quick" title="Нещо набързо" icon="⚡︎" />
         <QuickLink href="/fridge" title="Моят хладилник" icon="▢" />
         <QuickLink href="/weekly-menu" title="Седмично меню" icon="▦" />
         <QuickLink href="/favorites" title="Любими" icon="♥" />
         <QuickLink href="/shopping" title="Пазаруване" icon="☰" />
-        <QuickLink href="/chef" title="Моят готвач" icon="✳" />
+        <QuickLink href="/chef" title="Моят готвач" icon="✳︎" />
       </div>
     </div>
   );
