@@ -6,7 +6,10 @@ import { ALL_RECIPES } from "@/data/recipes";
 import RecipeCover from "@/components/RecipeCover";
 import { recipePerServing } from "@/lib/nutrition";
 import { METHOD_LABELS } from "@/lib/labels";
-import { BoltIcon, SparkleIcon } from "@/components/Sidebar";
+import {
+  BoltIcon, SparkleIcon, RecipesIcon, PotIcon, FridgeIcon,
+  CalendarIcon, HeartIcon, ShoppingIcon,
+} from "@/components/Sidebar";
 
 function dayIndex(offset = 0) {
   const start = new Date(2026, 0, 1).getTime();
@@ -64,13 +67,13 @@ export default function HomePage() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
-        <QuickLink href="/recipes" title="Какво да сготвя?" icon="▤" />
-        <QuickLink href="/cook4me" title="Cook4me" icon="◍" />
+        <QuickLink href="/recipes" title="Какво да сготвя?" icon={<RecipesIcon />} />
+        <QuickLink href="/cook4me" title="Cook4me" icon={<PotIcon />} />
         <QuickLink href="/quick" title="Нещо набързо" icon={<BoltIcon />} />
-        <QuickLink href="/fridge" title="Моят хладилник" icon="▢" />
-        <QuickLink href="/weekly-menu" title="Седмично меню" icon="▦" />
-        <QuickLink href="/favorites" title="Любими" icon="♥" />
-        <QuickLink href="/shopping" title="Пазаруване" icon="☰" />
+        <QuickLink href="/fridge" title="Моят хладилник" icon={<FridgeIcon />} />
+        <QuickLink href="/weekly-menu" title="Седмично меню" icon={<CalendarIcon />} />
+        <QuickLink href="/favorites" title="Любими" icon={<HeartIcon />} />
+        <QuickLink href="/shopping" title="Пазаруване" icon={<ShoppingIcon />} />
         <QuickLink href="/chef" title="Моят готвач" icon={<SparkleIcon />} />
       </div>
     </div>
