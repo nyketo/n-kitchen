@@ -65,7 +65,10 @@ export default function CookingModePage({ params }: { params: Promise<{ id: stri
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col p-6 md:p-12" style={{ background: "var(--nk-bg)" }}>
+    <div
+      className="fixed inset-0 z-[60] flex flex-col p-6 md:p-12 overflow-y-auto"
+      style={{ background: "var(--nk-bg)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1.5rem)" }}
+    >
       <div className="flex items-center justify-between mb-6">
         <span className="text-sm" style={{ color: "var(--nk-fg-soft)" }}>
           {METHOD_LABELS[method.method]} · Стъпка {stepIdx + 1}/{method.steps.length}
@@ -148,7 +151,10 @@ function FinishScreen({ recipeId, onDone }: { recipeId: string; onDone: () => vo
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center p-8 text-center gap-6" style={{ background: "var(--nk-bg)" }}>
+    <div
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-center p-8 text-center gap-6 overflow-y-auto"
+      style={{ background: "var(--nk-bg)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1.5rem)" }}
+    >
       <h1 className="font-display text-3xl">Как се получи?</h1>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((s) => (
