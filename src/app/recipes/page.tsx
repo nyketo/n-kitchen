@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ALL_RECIPES } from "@/data/recipes";
 import RecipeCard from "@/components/RecipeCard";
 import { CATEGORY_LABELS, METHOD_LABELS } from "@/lib/labels";
+import { isKetoFriendly } from "@/lib/nutrition";
 import type { CookingMethod, DietType, MealCategory } from "@/lib/types";
 
 const CATEGORIES = Object.keys(CATEGORY_LABELS) as MealCategory[];
@@ -23,7 +24,8 @@ export default function RecipesPage() {
     return ALL_RECIPES.filter((r) => {
       if (category !== "all" && r.category !== category) return false;
       if (method !== "all" && !r.methods.some((m) => m.method === method)) return false;
-      if (diet !== "all" && !r.dietType.includes(diet)) return false;
+      if (diet === "keto" && !isKetoFriendly(r)) return false;
+      if (diet === "low-carb" && !r.dietType.includes("low-carb") && !r.dietType.includes("keto")) return false;
       if (dairyFree && !r.dairyFree) return false;
       if (onePot && !r.tags.includes("one-pot")) return false;
       if (maxTime !== "all") {
