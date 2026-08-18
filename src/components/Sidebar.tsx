@@ -14,6 +14,7 @@ const NAV = [
   { href: "/shopping", label: "Пазаруване", icon: "☰" },
   { href: "/favorites", label: "Любими", icon: "♥" },
   { href: "/chef", label: "Моят готвач", icon: "✳" },
+  { href: "/account", label: "Профил", icon: "☁" },
   { href: "/settings", label: "Настройки", icon: "⚙" },
 ];
 
