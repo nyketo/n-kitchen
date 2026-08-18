@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 const NAV = [
   { href: "/", label: "Начало", icon: "⌂" },
@@ -16,8 +17,21 @@ const NAV = [
   { href: "/settings", label: "Настройки", icon: "⚙" },
 ];
 
+// Primary items always visible in the mobile bottom bar. Everything else lives behind "Още".
+const MOBILE_PRIMARY = ["/", "/recipes", "/chef", "/fridge"];
+
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [moreOpen, setMoreOpen] = useState(false);
+
+  const primaryItems = NAV.filter((i) => MOBILE_PRIMARY.includes(i.href));
+  const moreItems = NAV.filter((i) => !MOBILE_PRIMARY.includes(i.href));
+
+  function go(href: string) {
+    setMoreOpen(false);
+    router.push(href);
+  }
 
   return (
     <>
@@ -37,22 +51,66 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Mobile bottom nav */}
+      {/* Mobile "more" sheet — covers every nav item that doesn't fit in the bottom bar */}
+      {moreOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex items-end" onClick={() => setMoreOpen(false)}>
+          <div className="absolute inset-0" style={{ background: "rgba(20,12,6,0.45)" }} />
+          <div
+            className="relative w-full rounded-t-3xl border-t p-4 pb-8 grid grid-cols-3 gap-3"
+            style={{ background: "var(--nk-card-bg)", borderColor: "var(--nk-border)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1.5rem)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="col-span-3 flex items-center justify-between mb-1">
+              <span className="font-display text-lg">Още</span>
+              <button onClick={() => setMoreOpen(false)} className="text-sm px-2 py-1" aria-label="Затвори">✕</button>
+            </div>
+            {moreItems.map((item) => (
+              <button
+                key={item.href}
+                onClick={() => go(item.href)}
+                className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border py-4 text-xs"
+                style={{
+                  borderColor: "var(--nk-border)",
+                  background: isActive(pathname, item.href) ? "var(--nk-ember)" : "var(--nk-bg-2)",
+                  color: isActive(pathname, item.href) ? "#FBF3E7" : "var(--nk-fg)",
+                }}
+              >
+                <span className="text-xl leading-none">{item.icon}</span>
+                <span className="text-center leading-tight">{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile bottom nav — always shows all destinations (primary here, rest under "Още") */}
       <nav
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch border-t overflow-x-auto nk-scrollbar"
-        style={{ background: "var(--nk-card-bg)", borderColor: "var(--nk-border)" }}
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch border-t"
+        style={{
+          background: "var(--nk-card-bg)",
+          borderColor: "var(--nk-border)",
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        }}
       >
-        {NAV.slice(0, 6).map((item) => (
+        {primaryItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className="flex-1 min-w-[64px] flex flex-col items-center justify-center gap-0.5 py-2 text-[10px]"
+            className="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium"
             style={{ color: isActive(pathname, item.href) ? "var(--nk-ember)" : "var(--nk-fg-soft)" }}
           >
-            <span className="text-lg leading-none">{item.icon}</span>
-            {item.label}
+            <span className="text-xl leading-none">{item.icon}</span>
+            <span className="leading-tight">{item.label}</span>
           </Link>
         ))}
+        <button
+          onClick={() => setMoreOpen(true)}
+          className="flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium"
+          style={{ color: moreOpen ? "var(--nk-ember)" : "var(--nk-fg-soft)" }}
+        >
+          <span className="text-xl leading-none">⋯</span>
+          <span className="leading-tight">Още</span>
+        </button>
       </nav>
     </>
   );
