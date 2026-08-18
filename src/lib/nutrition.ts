@@ -142,3 +142,32 @@ export function makeOmadIngredients(recipe: Recipe): RecipeIngredient[] {
 export function nutritionForIngredients(ingredients: RecipeIngredient[]): NutritionTotals {
   return roundTotals(sumNutrition(ingredients.map(calcIngredientNutrition)));
 }
+
+/**
+ * Conservative per-serving net-carb ceiling for a meal to still count as strict keto,
+ * given a typical daily keto budget of ~20-30g net carbs spread over 1-3 meals.
+ */
+export const KETO_NET_CARB_LIMIT_G = 15;
+
+/** Whether a recipe's *actual computed* nutrition (not just its dietType label) fits strict keto per serving. */
+export function isKetoFriendly(recipe: Recipe): boolean {
+  return recipePerServing(recipe).netCarbs <= KETO_NET_CARB_LIMIT_G;
+}
+
+/**
+ * "Адаптирай към Кето": deterministically trims the biggest carb contributors —
+ * vegetable-category ingredients used in bulk (onion, carrot, leek, cabbage, peppers, etc.)
+ * — instead of touching protein, fat, or spices. No AI involved, so it's free and instant.
+ */
+export function makeKetoAdaptedIngredients(recipe: Recipe): RecipeIngredient[] {
+  const REDUCE_ABOVE_G = 60;
+  const REDUCE_FACTOR = 0.6;
+  return recipe.ingredients.map((ri) => {
+    const ing = INGREDIENT_MAP[ri.ingredientId];
+    if (!ing) return ri;
+    if (ing.category === "vegetable" && ri.grams != null && ri.grams > REDUCE_ABOVE_G) {
+      return { ...ri, grams: Math.round(ri.grams * REDUCE_FACTOR) };
+    }
+    return ri;
+  });
+}
