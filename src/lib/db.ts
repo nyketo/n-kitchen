@@ -26,6 +26,7 @@ export interface PersonalProduct { id?: number; name: string; kcal: number; prot
 export interface UserPhoto { id?: number; recipeId: string; dataUrl: string; createdAt: number; }
 export interface AiUsageRow { id?: number; month: string; costEUR: number; requests: number; }
 export interface RecentPromptRow { id?: number; recipeId: string; viewedAt: number; }
+export interface SavedAiRecipe { id?: number; title: string; prompt: string; text: string; createdAt: number; }
 
 class NKitchenDB extends Dexie {
   favorites!: Table<FavoriteRow, string>;
@@ -40,6 +41,7 @@ class NKitchenDB extends Dexie {
   photos!: Table<UserPhoto, number>;
   aiUsage!: Table<AiUsageRow, number>;
   recentlyViewed!: Table<RecentPromptRow, number>;
+  savedAiRecipes!: Table<SavedAiRecipe, number>;
 
   constructor() {
     super("n-kitchen");
@@ -56,6 +58,9 @@ class NKitchenDB extends Dexie {
       photos: "++id, recipeId",
       aiUsage: "++id, month",
       recentlyViewed: "++id, recipeId, viewedAt",
+    });
+    this.version(2).stores({
+      savedAiRecipes: "++id, createdAt",
     });
   }
 }
