@@ -29,6 +29,7 @@ import { saucesRecipes } from "./sauces";
 import { sauces2Recipes } from "./sauces2";
 import { sauces3Recipes } from "./sauces3";
 import { batch4Recipes } from "./batch4";
+import { bulgarianRecipes } from "./bulgarian";
 import type { Recipe } from "@/lib/types";
 
 export const ALL_RECIPES: Recipe[] = [
@@ -63,6 +64,7 @@ export const ALL_RECIPES: Recipe[] = [
   ...sauces2Recipes,
   ...sauces3Recipes,
   ...batch4Recipes,
+  ...bulgarianRecipes,
 ];
 
 export const RECIPE_MAP: Record<string, Recipe> = Object.fromEntries(ALL_RECIPES.map((r) => [r.id, r]));
