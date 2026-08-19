@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ALL_RECIPES } from "@/data/recipes";
 import RecipeCard from "@/components/RecipeCard";
 import { CATEGORY_LABELS, METHOD_LABELS } from "@/lib/labels";
@@ -10,14 +10,40 @@ import type { CookingMethod, DietType, MealCategory } from "@/lib/types";
 const CATEGORIES = Object.keys(CATEGORY_LABELS) as MealCategory[];
 const METHODS = Object.keys(METHOD_LABELS) as CookingMethod[];
 
+// Remembers filters + scroll position across a visit to a recipe and back, so returning
+// from "some recipe in the middle of the list" lands you where you were, not at the top.
+const STATE_KEY = "nk-recipes-list-state";
+
+type StoredState = {
+  query: string;
+  category: MealCategory | "all";
+  method: CookingMethod | "all";
+  diet: DietType | "all";
+  maxTime: number | "all";
+  dairyFree: boolean;
+  onePot: boolean;
+  scrollY: number;
+};
+
+function readStoredState(): StoredState | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(STATE_KEY);
+    return raw ? (JSON.parse(raw) as StoredState) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function RecipesPage() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<MealCategory | "all">("all");
-  const [method, setMethod] = useState<CookingMethod | "all">("all");
-  const [diet, setDiet] = useState<DietType | "all">("all");
-  const [maxTime, setMaxTime] = useState<number | "all">("all");
-  const [dairyFree, setDairyFree] = useState(false);
-  const [onePot, setOnePot] = useState(false);
+  const restored = useRef(readStoredState());
+  const [query, setQuery] = useState(() => restored.current?.query ?? "");
+  const [category, setCategory] = useState<MealCategory | "all">(() => restored.current?.category ?? "all");
+  const [method, setMethod] = useState<CookingMethod | "all">(() => restored.current?.method ?? "all");
+  const [diet, setDiet] = useState<DietType | "all">(() => restored.current?.diet ?? "all");
+  const [maxTime, setMaxTime] = useState<number | "all">(() => restored.current?.maxTime ?? "all");
+  const [dairyFree, setDairyFree] = useState(() => restored.current?.dairyFree ?? false);
+  const [onePot, setOnePot] = useState(() => restored.current?.onePot ?? false);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -39,6 +65,59 @@ export default function RecipesPage() {
       return true;
     });
   }, [query, category, method, diet, maxTime, dairyFree, onePot]);
+
+  // Persist filters on every change so a returning visit re-applies the same list.
+  useEffect(() => {
+    const prev = readStoredState();
+    const next: StoredState = {
+      query, category, method, diet, maxTime, dairyFree, onePot,
+      scrollY: prev?.scrollY ?? 0,
+    };
+    try {
+      sessionStorage.setItem(STATE_KEY, JSON.stringify(next));
+    } catch {
+      // ignore quota/availability errors
+    }
+  }, [query, category, method, diet, maxTime, dairyFree, onePot]);
+
+  // Continuously remember scroll position (debounced via rAF) so navigating to a recipe
+  // and back restores the exact spot instead of resetting to the top of the list.
+  useEffect(() => {
+    let ticking = false;
+    function save() {
+      ticking = false;
+      const prev = readStoredState();
+      if (!prev) return;
+      try {
+        sessionStorage.setItem(STATE_KEY, JSON.stringify({ ...prev, scrollY: window.scrollY }));
+      } catch {
+        // ignore
+      }
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(save);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Restore scroll position once, after the (already-filtered) list has painted.
+  // Two nested rAFs so this runs after layout has settled, not mid-paint.
+  useEffect(() => {
+    const y = restored.current?.scrollY;
+    if (!y) return;
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => window.scrollTo(0, y));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
