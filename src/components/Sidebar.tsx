@@ -43,7 +43,7 @@ export default function Sidebar() {
     <>
       {/* Desktop / tablet sidebar */}
       <aside
-        className="hidden md:flex md:flex-col md:w-56 lg:w-64 shrink-0 border-r nk-scrollbar overflow-y-auto"
+        className="hidden md:flex md:flex-col md:w-56 lg:w-64 shrink-0 border-r nk-scrollbar overflow-y-auto sticky top-0 h-screen"
         style={{ background: "var(--nk-bg-2)", borderColor: "var(--nk-border)" }}
       >
         <Logo />
