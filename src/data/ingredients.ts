@@ -130,6 +130,8 @@ export const INGREDIENTS: Ingredient[] = [
   { id: "oregano", name_bg: "Риган", category: "spice", unit: "g", kcal: 265, protein: 9, fat: 4.3, carbs: 69, fiber: 42.5 },
   { id: "lemon", name_bg: "Лимон (сок)", category: "fruit", unit: "ml", kcal: 22, protein: 0.4, fat: 0.2, carbs: 6.9, fiber: 0.3 },
   { id: "dill", name_bg: "Копър", name_de: "Dill", category: "spice", unit: "g", kcal: 43, protein: 3.5, fat: 1.1, carbs: 7, fiber: 2.1 },
+  { id: "cumin", name_bg: "Кимион", name_de: "Kreuzkümmel", category: "spice", unit: "g", kcal: 375, protein: 17.8, fat: 22.3, carbs: 44.2, fiber: 10.5 },
+  { id: "ham", name_bg: "Шунка", name_de: "Schinken", category: "meat", unit: "g", kcal: 145, protein: 18, fat: 8, carbs: 1.5, fiber: 0 },
 ];
 
 export const INGREDIENT_MAP: Record<string, Ingredient> = Object.fromEntries(
