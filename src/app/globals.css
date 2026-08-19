@@ -42,30 +42,27 @@ html, body {
 }
 
 /*
- * Decorative background "web": three sets of thin parallel lines at 0/60/120
- * degrees overlap into a seamless triangular net, plus a faint dot at every
- * intersection so it reads as a woven cobweb rather than plain hatching —
- * dense, discreet, but clearly visible behind all page content. Pure CSS
+ * Decorative background: a soft grid of hollow rings with a small dot
+ * nested inside each, offset row-to-row like bubbles/circles — discreet
+ * (low opacity) but clearly readable behind all page content. Pure CSS
  * (no image asset). Colors flip for dark mode below.
  */
 body {
   background-color: var(--nk-bg);
   background-image:
-    radial-gradient(circle, rgba(36, 29, 22, 0.16) 1.1px, transparent 1.3px),
-    repeating-linear-gradient(0deg, transparent 0 21px, rgba(36, 29, 22, 0.13) 21px 22.4px),
-    repeating-linear-gradient(60deg, transparent 0 21px, rgba(36, 29, 22, 0.13) 21px 22.4px),
-    repeating-linear-gradient(120deg, transparent 0 21px, rgba(36, 29, 22, 0.13) 21px 22.4px);
-  background-size: 22.4px 22.4px, auto, auto, auto;
+    radial-gradient(circle, transparent 0 9px, rgba(36, 29, 22, 0.11) 9px 10px, transparent 10px 100%),
+    radial-gradient(circle, rgba(36, 29, 22, 0.14) 0 1.6px, transparent 1.6px 100%);
+  background-size: 38px 38px, 38px 38px;
+  background-position: 0 0, 19px 19px;
   background-attachment: fixed;
 }
 
 .dark body {
   background-image:
-    radial-gradient(circle, rgba(242, 233, 218, 0.15) 1.1px, transparent 1.3px),
-    repeating-linear-gradient(0deg, transparent 0 21px, rgba(242, 233, 218, 0.11) 21px 22.4px),
-    repeating-linear-gradient(60deg, transparent 0 21px, rgba(242, 233, 218, 0.11) 21px 22.4px),
-    repeating-linear-gradient(120deg, transparent 0 21px, rgba(242, 233, 218, 0.11) 21px 22.4px);
-  background-size: 22.4px 22.4px, auto, auto, auto;
+    radial-gradient(circle, transparent 0 9px, rgba(242, 233, 218, 0.12) 9px 10px, transparent 10px 100%),
+    radial-gradient(circle, rgba(242, 233, 218, 0.15) 0 1.6px, transparent 1.6px 100%);
+  background-size: 38px 38px, 38px 38px;
+  background-position: 0 0, 19px 19px;
 }
 
 body {
