@@ -49,6 +49,9 @@ export const INGREDIENTS: Ingredient[] = [
   { id: "sausage-lukanka", name_bg: "Луканка", category: "meat", unit: "g", kcal: 380, protein: 24, fat: 31, carbs: 1, fiber: 0 },
   { id: "sausage-sudzhuk", name_bg: "Суджук", category: "meat", unit: "g", kcal: 400, protein: 23, fat: 33, carbs: 1.5, fiber: 0 },
   { id: "sausage-quality", name_bg: "Качествена свинска наденица (ниско въглехидратна)", category: "meat", unit: "g", kcal: 300, protein: 15, fat: 26, carbs: 1.5, fiber: 0 },
+  { id: "beef-tripe", name_bg: "Телешки шкембета", name_de: "Kutteln", category: "meat", unit: "g", kcal: 85, protein: 12.1, fat: 3.7, carbs: 0, fiber: 0 },
+  { id: "lamb-shoulder", name_bg: "Агнешко рамо", name_de: "Lammschulter", category: "meat", unit: "g", kcal: 258, protein: 16.5, fat: 21, carbs: 0, fiber: 0 },
+  { id: "lamb-chop", name_bg: "Агнешки котлет", name_de: "Lammkotelett", category: "meat", unit: "g", kcal: 294, protein: 15.5, fat: 25.5, carbs: 0, fiber: 0 },
 
   // ---- FISH ----
   { id: "mackerel", name_bg: "Скумрия (филе)", name_de: "Makrele", category: "fish", unit: "g", kcal: 205, protein: 18.6, fat: 13.9, carbs: 0, fiber: 0 },
@@ -126,6 +129,7 @@ export const INGREDIENTS: Ingredient[] = [
   { id: "mint", name_bg: "Мента", category: "spice", unit: "g", kcal: 70, protein: 3.8, fat: 0.9, carbs: 15, fiber: 8 },
   { id: "oregano", name_bg: "Риган", category: "spice", unit: "g", kcal: 265, protein: 9, fat: 4.3, carbs: 69, fiber: 42.5 },
   { id: "lemon", name_bg: "Лимон (сок)", category: "fruit", unit: "ml", kcal: 22, protein: 0.4, fat: 0.2, carbs: 6.9, fiber: 0.3 },
+  { id: "dill", name_bg: "Копър", name_de: "Dill", category: "spice", unit: "g", kcal: 43, protein: 3.5, fat: 1.1, carbs: 7, fiber: 2.1 },
 ];
 
 export const INGREDIENT_MAP: Record<string, Ingredient> = Object.fromEntries(
