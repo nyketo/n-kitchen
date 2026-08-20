@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  /* N Kitchen — original palette: "Ember Cookbook" */
-  --nk-paper: #F6F1E7;
-  --nk-paper-2: #EFE7D8;
-  --nk-ink: #241D16;
-  --nk-ink-soft: #55493B;
-  --nk-ember: #B5502D;
-  --nk-ember-dark: #8F3D21;
-  --nk-ochre: #D69A3C;
-  --nk-olive: #4C5A32;
-  --nk-line: #E3D8C4;
-  --nk-card: #FFFDF8;
-  --nk-danger: #A63B2C;
+  /* N Kitchen — palette: "Sunny Citrus" (fresh, bright, less heavy than the old rust/brown theme) */
+  --nk-paper: #FFFAF0;
+  --nk-paper-2: #FFEFCE;
+  --nk-ink: #2E2A1E;
+  --nk-ink-soft: #6B6152;
+  --nk-ember: #F2994A;
+  --nk-ember-dark: #D9782B;
+  --nk-ochre: #FFC93C;
+  --nk-olive: #5FA85A;
+  --nk-line: #F1E4C6;
+  --nk-card: #FFFFFF;
+  --nk-danger: #D9483C;
 
   --nk-bg: var(--nk-paper);
   --nk-bg-2: var(--nk-paper-2);
@@ -23,15 +23,15 @@
 }
 
 .dark {
-  --nk-bg: #171310;
-  --nk-bg-2: #1F1A15;
-  --nk-fg: #F2E9DA;
-  --nk-fg-soft: #C9BBA5;
-  --nk-card-bg: #221C16;
-  --nk-border: #362D23;
-  --nk-ember: #E06B3F;
-  --nk-ochre: #E8B45C;
-  --nk-olive: #7C9257;
+  --nk-bg: #19140C;
+  --nk-bg-2: #211A10;
+  --nk-fg: #FBF1DC;
+  --nk-fg-soft: #D8C7A8;
+  --nk-card-bg: #241D12;
+  --nk-border: #3A2E1B;
+  --nk-ember: #FFA94D;
+  --nk-ochre: #FFD766;
+  --nk-olive: #8AC97C;
 }
 
 * { border-color: var(--nk-border); }
