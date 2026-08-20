@@ -8,17 +8,24 @@ export const bulgarian2Recipes: Recipe[] = [
   recipe({
     id: "bg-meatball-egg-lemon-soup",
     title: "Супа топчета с яйце-лимон",
-    description: "Домашна супа с малки кюфтенца, класически овкусена с яйце и лимон — без ориз.",
-    category: "bulgarian", cuisine: "bg", dietType: ["keto", "low-carb"],
+    description: "Домашна супа с малки кюфтенца с ориз, класически овкусена с яйце и лимон.",
+    category: "bulgarian", cuisine: "bg", dietType: [],
     ingredients: [
-      ing("mixed-minced", 250), ing("onion", 40), ing("egg", 2, "pcs"), ing("lemon", 20, "ml"),
+      ing("mixed-minced", 250), ing("rice", 40), ing("onion", 40), ing("egg", 2, "pcs"), ing("lemon", 20, "ml"),
       ing("black-pepper", 1), ing("salt", 5),
     ],
     servingsBase: 1,
+    ketoVariant: {
+      note: "Оризът в кюфтенцата е премахнат — леко по-крехки топчета, същият вкус на бульона.",
+      ingredients: [
+        ing("mixed-minced", 250), ing("onion", 40), ing("egg", 2, "pcs"), ing("lemon", 20, "ml"),
+        ing("black-pepper", 1), ing("salt", 5),
+      ],
+    },
     methods: [{
       method: "stovetop", prepTime: 15, activeTime: 15, cookTime: 20,
       steps: [
-        step("Замеси каймата с настъргания лук, сол и пипер, оформи малки топчета."),
+        step("Замеси каймата с продуктите от списъка по-горе (освен яйцата и лимона), оформи малки топчета."),
         step("Свари топчетата в 600 ml вода 12 мин.", { appliance: "stovetop", minutes: 12 }),
         step("Разбий едно яйце с лимоновия сок, разреди с малко от бульона и вкарай в тенджерата, като бъркаш."),
         step("Загрей внимателно без да завира 2 мин и сервирай веднага.", { appliance: "stovetop", minutes: 2 }),
@@ -268,20 +275,27 @@ export const bulgarian2Recipes: Recipe[] = [
   }),
   recipe({
     id: "bg-stuffed-peppers-meat",
-    title: "Пълнени чушки с кайма",
-    description: "Класически пълнени чушки, но с плънка само от кайма и домат — без ориз.",
-    category: "bulgarian", cuisine: "bg", dietType: ["low-carb"],
+    title: "Пълнени чушки с кайма и ориз",
+    description: "Класически пълнени чушки с плънка от кайма, ориз и домат.",
+    category: "bulgarian", cuisine: "bg", dietType: [],
     ingredients: [
-      ing("pepper", 300, "g", "4 средни чушки"), ing("mixed-minced", 300), ing("onion", 60),
+      ing("pepper", 300, "g", "4 средни чушки"), ing("mixed-minced", 300), ing("rice", 60), ing("onion", 60),
       ing("tomato-fresh", 80), ing("paprika", 2), ing("olive-oil", 15, "ml"), ing("salt", 5),
     ],
     servingsBase: 1,
+    ketoVariant: {
+      note: "Оризът в плънката е заменен с настърган карфиол вместо ориз.",
+      ingredients: [
+        ing("pepper", 300, "g", "4 средни чушки"), ing("mixed-minced", 300), ing("cauliflower", 120, "g", "настъргано като ориз"),
+        ing("onion", 60), ing("tomato-fresh", 80), ing("paprika", 2), ing("olive-oil", 15, "ml"), ing("salt", 5),
+      ],
+    },
     methods: [{
       method: "oven", prepTime: 20, activeTime: 12, cookTime: 40,
       ovenSettings: { tempC: 190, fan: false, covered: true, preheat: true },
       steps: [
         step("Задушавай лука в олиото 3 мин, добави каймата и запечи 6 мин."),
-        step("Разбъркай с половината домати и паприка, подправи."),
+        step("Разбъркай с останалите продукти от списъка (без чушките и половината домати), подправи."),
         step("Напълни изчистените чушки и подреди изправени в гювече."),
         step("Залей с останалите домати, покрий и печи на 190°C 35 мин.", { appliance: "oven", minutes: 35, tempC: 190 }),
       ],
@@ -315,19 +329,27 @@ export const bulgarian2Recipes: Recipe[] = [
   }),
   recipe({
     id: "bg-cabbage-rolls-meat",
-    title: "Зелеви сарми с кайма",
-    description: "Домашни сарми от зелеви листа, пълнени само с кайма — без ориз.",
-    category: "bulgarian", cuisine: "bg", dietType: ["keto", "low-carb"],
+    title: "Зелеви сарми с кайма и ориз",
+    description: "Домашни сарми от зелеви листа, пълнени с кайма и ориз.",
+    category: "bulgarian", cuisine: "bg", dietType: [],
     ingredients: [
-      ing("sauerkraut", 300, "g", "листа за увиване"), ing("mixed-minced", 300), ing("onion", 60),
-      ing("paprika", 2), ing("olive-oil", 15, "ml"), ing("salt", 4),
+      ing("sauerkraut", 300, "g", "листа за увиване"), ing("mixed-minced", 300), ing("rice", 60),
+      ing("onion", 60), ing("paprika", 2), ing("olive-oil", 15, "ml"), ing("salt", 4),
     ],
     servingsBase: 1,
+    ketoVariant: {
+      note: "Оризът в плънката е заменен с настърган карфиол вместо ориз.",
+      ingredients: [
+        ing("sauerkraut", 300, "g", "листа за увиване"), ing("mixed-minced", 300),
+        ing("cauliflower", 120, "g", "настъргано като ориз"), ing("onion", 60),
+        ing("paprika", 2), ing("olive-oil", 15, "ml"), ing("salt", 4),
+      ],
+    },
     methods: [{
       method: "oven", prepTime: 25, activeTime: 15, cookTime: 50,
       ovenSettings: { tempC: 180, fan: false, covered: true, preheat: true },
       steps: [
-        step("Задушавай лука в олиото 3 мин, смеси със суровата кайма и паприка."),
+        step("Задушавай лука в олиото 3 мин, смеси със суровата кайма и останалите продукти от списъка."),
         step("Разгъни листата кисело зеле, увий по малко плънка във всяко."),
         step("Подреди сармите плътно в гювече, залей с 200 ml вода."),
         step("Покрий и печи на 180°C 45 мин.", { appliance: "oven", minutes: 45, tempC: 180 }),
