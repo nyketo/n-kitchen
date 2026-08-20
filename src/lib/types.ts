@@ -54,4 +54,22 @@ export interface Recipe {
   tags: string[];
   image: string; // path or gradient key
   fishType?: "mackerel" | "other";
+  /**
+   * Optional curated keto/low-carb version of an authentic (normal) recipe — e.g. real rice
+   * swapped for cauliflower rice, potatoes dropped. When present, the recipe detail page shows
+   * a "Нормална версия / Кето версия" toggle using these exact ingredients (not the generic
+   * vegetable-reduction adapter). Recipes without this field are either already low-carb as
+   * written, or not realistically adaptable (e.g. banitsa, cakes) and are shown as-is.
+   */
+  ketoVariant?: {
+    ingredients: RecipeIngredient[];
+    note?: string; // short description of what changed, e.g. "ориз → карфиолов ориз, без картофи"
+  };
+  /**
+   * When true, the generic "АДАПТИРАЙ КЪМ КЕТО" banner/button never shows for this recipe —
+   * for genuine flour/sugar-based bakes (banitsa, cakes) where the carbs come from the dough
+   * itself, not bulk vegetables, so the generic vegetable-reduction adapter would do nothing
+   * meaningful and offering it would be misleading.
+   */
+  noKetoAdapt?: boolean;
 }
