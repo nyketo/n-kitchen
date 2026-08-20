@@ -1,23 +1,25 @@
 import type { MealCategory } from "@/lib/types";
 import { CategoryArt } from "./CategoryArt";
 
+// Fresh, cheerful, sun-bright gradients — no dark/muddy endpoints. Each still reads as its
+// own category, just via bright hue instead of murky shade.
 const GRADIENTS: Record<MealCategory, string> = {
-  pork: "linear-gradient(155deg,#C5623A 0%,#9C4A28 45%,#6B2E17 100%)",
-  beef: "linear-gradient(155deg,#A6472A 0%,#7A331C 45%,#3E1D0F 100%)",
-  chicken: "linear-gradient(155deg,#E3AE55 0%,#C1872F 45%,#8C5D1E 100%)",
-  minced: "linear-gradient(155deg,#B8462F 0%,#8A2F1E 45%,#521B12 100%)",
-  mackerel: "linear-gradient(155deg,#5C6C3E 0%,#3F4B27 45%,#232A15 100%)",
-  "other-fish": "linear-gradient(155deg,#4B6E76 0%,#33484E 45%,#1C2A2E 100%)",
-  eggs: "linear-gradient(155deg,#EFC066 0%,#CC983E 45%,#93691F 100%)",
-  soups: "linear-gradient(155deg,#7C5836 0%,#573A21 45%,#2E1D10 100%)",
-  stews: "linear-gradient(155deg,#8C4A2A 0%,#623119 45%,#33190D 100%)",
-  salads: "linear-gradient(155deg,#6E8C4A 0%,#4B6030 45%,#293618 100%)",
-  desserts: "linear-gradient(155deg,#9E7B57 0%,#75563A 45%,#453120 100%)",
-  bread: "linear-gradient(155deg,#D19E5D 0%,#A9753A 45%,#734E24 100%)",
-  pizza: "linear-gradient(155deg,#C5623A 0%,#9C4A28 45%,#5B2A17 100%)",
-  sauces: "linear-gradient(155deg,#AD6A34 0%,#7C4A22 45%,#472A13 100%)",
-  cabbage: "linear-gradient(155deg,#7C9152 0%,#556334 45%,#2F391B 100%)",
-  bulgarian: "linear-gradient(155deg,#9C4A28 0%,#C5623A 45%,#6B2E17 100%)",
+  pork: "linear-gradient(155deg,#FFCBA6 0%,#FFA36C 55%,#FF8A50 100%)",
+  beef: "linear-gradient(155deg,#FFB199 0%,#FF8A65 55%,#F4694A 100%)",
+  chicken: "linear-gradient(155deg,#FFEBA0 0%,#FFD666 55%,#FFC13D 100%)",
+  minced: "linear-gradient(155deg,#FFB199 0%,#FF7E67 55%,#F4573B 100%)",
+  mackerel: "linear-gradient(155deg,#BEEBE0 0%,#7CD6C4 55%,#4CBFAE 100%)",
+  "other-fish": "linear-gradient(155deg,#B3E5FC 0%,#7BCDF4 55%,#4FB6EC 100%)",
+  eggs: "linear-gradient(155deg,#FFF3B0 0%,#FFE066 55%,#FFCB3D 100%)",
+  soups: "linear-gradient(155deg,#FFE0A8 0%,#FFC169 55%,#FFA53E 100%)",
+  stews: "linear-gradient(155deg,#FFCBA6 0%,#FFA06B 55%,#F5813E 100%)",
+  salads: "linear-gradient(155deg,#E4F3B0 0%,#C4E27E 55%,#9FCB52 100%)",
+  desserts: "linear-gradient(155deg,#FBD3E6 0%,#F5A9CE 55%,#EF80B5 100%)",
+  bread: "linear-gradient(155deg,#FFE9A6 0%,#FFD066 55%,#FFB94A 100%)",
+  pizza: "linear-gradient(155deg,#FFC79E 0%,#FF9B63 55%,#FF7A4A 100%)",
+  sauces: "linear-gradient(155deg,#FFE2A6 0%,#FFC066 55%,#FFA23E 100%)",
+  cabbage: "linear-gradient(155deg,#D6EFA8 0%,#B6DE78 55%,#93CB4E 100%)",
+  bulgarian: "linear-gradient(155deg,#FFE0B3 0%,#FFB877 55%,#FF9856 100%)",
 };
 
 export default function RecipeCover({
@@ -56,8 +58,8 @@ export default function RecipeCover({
         <CategoryArt category={category} />
       </div>
       <div
-        className="absolute inset-x-0 bottom-0 h-10 opacity-70"
-        style={{ backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 100%)" }}
+        className="absolute inset-x-0 bottom-0 h-10 opacity-60"
+        style={{ backgroundImage: "linear-gradient(to top, rgba(120,60,20,0.22) 0%, transparent 100%)" }}
       />
       <div
         className="absolute inset-x-0 bottom-0 h-px opacity-30"
