@@ -187,26 +187,33 @@ export const bulgarianRecipes: Recipe[] = [
     tags: ["stew", "chicken", "bulgarian"], image: "kavarma-chicken",
   }),
   recipe({
-    id: "bg-gyuvech-no-potato",
-    title: "Гювеч по селски без картофи",
-    description: "Летен гювеч със свинско, тиквички, чушки и домати — без картофи.",
-    category: "bulgarian", cuisine: "bg", dietType: ["low-carb"],
+    id: "bg-gyuvech-po-selski",
+    title: "Гювеч по селски",
+    description: "Автентичен летен гювеч със свинско, картофи, тиквички, чушки и домати.",
+    category: "bulgarian", cuisine: "bg", dietType: [],
     ingredients: [
-      ing("pork-shoulder", 300), ing("zucchini", 150), ing("pepper", 100), ing("tomato-fresh", 100),
-      ing("onion", 50), ing("garlic", 8), ing("olive-oil", 15, "ml"), ing("salt", 5),
+      ing("pork-shoulder", 300), ing("potato", 200), ing("zucchini", 150), ing("pepper", 100),
+      ing("tomato-fresh", 100), ing("onion", 50), ing("garlic", 8), ing("olive-oil", 15, "ml"), ing("salt", 5),
     ],
     servingsBase: 1,
+    ketoVariant: {
+      note: "Картофите са премахнати, заместени с повече тиквички и карфиол вместо тях.",
+      ingredients: [
+        ing("pork-shoulder", 300), ing("zucchini", 200), ing("cauliflower", 150), ing("pepper", 100),
+        ing("tomato-fresh", 100), ing("onion", 50), ing("garlic", 8), ing("olive-oil", 15, "ml"), ing("salt", 5),
+      ],
+    },
     methods: [{
       method: "oven", prepTime: 15, activeTime: 10, cookTime: 45,
       ovenSettings: { tempC: 200, fan: false, covered: true, preheat: true },
       steps: [
         step("Запечи месото на кубчета в олиото 5 мин."),
-        step("Смеси със зеленчуците, нарязани на едро, в гювече."),
+        step("Смеси със зеленчуците от списъка по-горе, нарязани на едро, в гювече."),
         step("Подправи със сол и чесън, покрий и печи на 200°C 40 мин.", { appliance: "oven", minutes: 40, tempC: 200 }),
       ],
     }],
     difficulty: "easy", cleanupLevel: "normal", season: "summer", dairyFree: true, omadCompatible: false,
-    tags: ["stew", "pork", "bulgarian", "oven", "one-pot"], image: "gyuvech-no-potato",
+    tags: ["stew", "pork", "bulgarian", "oven", "one-pot"], image: "gyuvech-po-selski",
   }),
   recipe({
     id: "bg-beef-celery-yahniya",
@@ -301,26 +308,34 @@ export const bulgarianRecipes: Recipe[] = [
     tags: ["pork", "bulgarian", "oven"], image: "pork-loin-village-tray",
   }),
   recipe({
-    id: "bg-kapama-no-rice",
-    title: "Капама по бански без ориз",
-    description: "Слоеста капама със свинско, луканка и зеле — без ориз.",
-    category: "bulgarian", cuisine: "bg", dietType: ["keto", "low-carb"],
+    id: "bg-kapama-po-bansko",
+    title: "Капама по бански",
+    description: "Автентична слоеста капама със свинско, луканка, зеле и ориз.",
+    category: "bulgarian", cuisine: "bg", dietType: [],
     ingredients: [
       ing("pork-shoulder", 250), ing("sausage-lukanka", 50), ing("cabbage", 200),
-      ing("sauerkraut", 100), ing("onion", 40), ing("bay-leaf", 2, "pcs"), ing("black-pepper", 1),
+      ing("sauerkraut", 100), ing("rice", 60), ing("onion", 40), ing("bay-leaf", 2, "pcs"), ing("black-pepper", 1),
     ],
     servingsBase: 1,
+    ketoVariant: {
+      note: "Оризът е заменен с настърган карфиол вместо ориз, добавен в последните 15 мин.",
+      ingredients: [
+        ing("pork-shoulder", 250), ing("sausage-lukanka", 50), ing("cabbage", 200),
+        ing("sauerkraut", 100), ing("cauliflower", 150, "g", "настъргано като ориз"),
+        ing("onion", 40), ing("bay-leaf", 2, "pcs"), ing("black-pepper", 1),
+      ],
+    },
     methods: [{
       method: "oven", prepTime: 15, activeTime: 10, cookTime: 60,
       ovenSettings: { tempC: 180, fan: false, covered: true, preheat: true },
       steps: [
-        step("Наслагвай на пластове в гювече: зеле, месо, луканка, лук, кисело зеле."),
+        step("Наслагвай на пластове в гювече: зеле, месо, луканка, лук, кисело зеле и продуктите от списъка по-горе."),
         step("Подправи с дафинов лист и черен пипер между пластовете."),
         step("Покрий и печи на 180°C 55-60 мин.", { appliance: "oven", minutes: 58, tempC: 180 }),
       ],
     }],
     difficulty: "medium", cleanupLevel: "normal", season: "winter", dairyFree: true, omadCompatible: false,
-    tags: ["pork", "cabbage", "bulgarian", "oven"], image: "kapama-no-rice",
+    tags: ["pork", "cabbage", "bulgarian", "oven"], image: "kapama-po-bansko",
   }),
   recipe({
     id: "bg-chicken-liver-village-cheese",
