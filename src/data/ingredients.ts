@@ -4,7 +4,7 @@
 
 export type IngredientCategory =
   | "meat" | "fish" | "egg" | "dairy" | "vegetable" | "fruit"
-  | "fat" | "spice" | "nut" | "sweetener" | "flour" | "other";
+  | "fat" | "spice" | "nut" | "sweetener" | "flour" | "grain" | "other";
 
 export interface Ingredient {
   id: string;
@@ -132,6 +132,17 @@ export const INGREDIENTS: Ingredient[] = [
   { id: "dill", name_bg: "Копър", name_de: "Dill", category: "spice", unit: "g", kcal: 43, protein: 3.5, fat: 1.1, carbs: 7, fiber: 2.1 },
   { id: "cumin", name_bg: "Кимион", name_de: "Kreuzkümmel", category: "spice", unit: "g", kcal: 375, protein: 17.8, fat: 22.3, carbs: 44.2, fiber: 10.5 },
   { id: "ham", name_bg: "Шунка", name_de: "Schinken", category: "meat", unit: "g", kcal: 145, protein: 18, fat: 8, carbs: 1.5, fiber: 0 },
+
+  // ---- REAL STARCHES / TRADITIONAL BAKING (for authentic, non-keto Bulgarian dishes) ----
+  { id: "potato", name_bg: "Картофи", name_de: "Kartoffeln", category: "vegetable", unit: "g", kcal: 77, protein: 2, fat: 0.1, carbs: 17, fiber: 2.2 },
+  { id: "rice", name_bg: "Ориз", name_de: "Reis", category: "grain", unit: "g", kcal: 365, protein: 7.1, fat: 0.7, carbs: 79, fiber: 1.3 },
+  { id: "wheat-flour", name_bg: "Бяло брашно", name_de: "Weizenmehl", category: "grain", unit: "g", kcal: 364, protein: 10.3, fat: 1, carbs: 76.3, fiber: 2.7 },
+  { id: "sugar", name_bg: "Захар", name_de: "Zucker", category: "sweetener", unit: "g", kcal: 387, protein: 0, fat: 0, carbs: 100, fiber: 0 },
+  { id: "phyllo-pastry", name_bg: "Кори за баница", name_de: "Yufka-Teigblätter", category: "grain", unit: "g", kcal: 300, protein: 8, fat: 4, carbs: 58, fiber: 2 },
+  { id: "cinnamon", name_bg: "Канела", name_de: "Zimt", category: "spice", unit: "g", kcal: 247, protein: 4, fat: 3.2, carbs: 80.6, fiber: 53.1 },
+  { id: "milk", name_bg: "Прясно мляко", name_de: "Milch", category: "dairy", unit: "ml", kcal: 61, protein: 3.2, fat: 3.3, carbs: 4.8, fiber: 0, dairy: true },
+  { id: "sunflower-oil", name_bg: "Слънчогледово олио", name_de: "Sonnenblumenöl", category: "fat", unit: "ml", kcal: 884, protein: 0, fat: 100, carbs: 0, fiber: 0 },
+  { id: "pumpkin", name_bg: "Тиква", name_de: "Kürbis", category: "vegetable", unit: "g", kcal: 26, protein: 1, fat: 0.1, carbs: 6.5, fiber: 0.5 },
 ];
 
 export const INGREDIENT_MAP: Record<string, Ingredient> = Object.fromEntries(
