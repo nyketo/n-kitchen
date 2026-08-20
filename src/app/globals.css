@@ -42,27 +42,22 @@ html, body {
 }
 
 /*
- * Decorative background: a soft grid of hollow rings with a small dot
- * nested inside each, offset row-to-row like bubbles/circles — discreet
- * (low opacity) but clearly readable behind all page content. Pure CSS
- * (no image asset). Colors flip for dark mode below.
+ * Decorative background: a heavily-blurred, softly waving Bulgarian flag —
+ * three hazy undulating bands (white/green/red) rendered as a static SVG,
+ * not crisp stripes, plus a light scatter of small snowflake specks on top.
+ * Discreet, atmospheric, not a loud literal flag. Colors flip for dark mode.
  */
 body {
   background-color: var(--nk-bg);
-  background-image:
-    radial-gradient(circle, transparent 0 9px, rgba(36, 29, 22, 0.11) 9px 10px, transparent 10px 100%),
-    radial-gradient(circle, rgba(36, 29, 22, 0.14) 0 1.6px, transparent 1.6px 100%);
-  background-size: 38px 38px, 38px 38px;
-  background-position: 0 0, 19px 19px;
+  background-image: url("/bg-flag.svg");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
 .dark body {
-  background-image:
-    radial-gradient(circle, transparent 0 9px, rgba(242, 233, 218, 0.12) 9px 10px, transparent 10px 100%),
-    radial-gradient(circle, rgba(242, 233, 218, 0.15) 0 1.6px, transparent 1.6px 100%);
-  background-size: 38px 38px, 38px 38px;
-  background-position: 0 0, 19px 19px;
+  background-image: url("/bg-flag-dark.svg");
 }
 
 body {
