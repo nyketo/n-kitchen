@@ -11,15 +11,19 @@ import { CATEGORY_LABELS, METHOD_LABELS } from "@/lib/labels";
 import { db } from "@/lib/db";
 import {
   recipeScaledNutrition, scaleIngredients, makeOmadIngredients, nutritionForIngredients,
-  makeKetoAdaptedIngredients, isKetoFriendly, recipePerServing,
+  makeKetoAdaptedIngredients, isKetoFriendly, recipePerServing, KETO_NET_CARB_LIMIT_G,
 } from "@/lib/nutrition";
 
 export default function RecipeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const recipe = getRecipeById(id);
+  const hasCuratedVariant = !!recipe?.ketoVariant;
   const [multiplier, setMultiplier] = useState(1);
   const [omad, setOmad] = useState(false);
   const [ketoAdapt, setKetoAdapt] = useState(false);
+  // Only relevant when the recipe ships a curated ketoVariant (real rice/potato swapped
+  // for cauliflower rice etc.) — "normal" shows the authentic dish, "keto" the adapted one.
+  const [variant, setVariant] = useState<"normal" | "keto">("normal");
   const [methodIdx, setMethodIdx] = useState(0);
 
   const isFavorite = useLiveQuery(() => db.favorites.get(id), [id]);
@@ -27,21 +31,24 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
   const notes = useLiveQuery(() => db.notes.where("recipeId").equals(id).toArray(), [id]);
   const [noteText, setNoteText] = useState("");
 
+  const baseIngredients = useMemo(() => {
+    if (!recipe) return [];
+    return hasCuratedVariant && variant === "keto" ? recipe.ketoVariant!.ingredients : recipe.ingredients;
+  }, [recipe, hasCuratedVariant, variant]);
+
   const displayedIngredients = useMemo(() => {
     if (!recipe) return [];
-    if (omad) return makeOmadIngredients(recipe);
-    const base = ketoAdapt ? makeKetoAdaptedIngredients(recipe) : recipe.ingredients;
+    if (omad) return makeOmadIngredients({ ...recipe, ingredients: baseIngredients });
+    const base = !hasCuratedVariant && ketoAdapt ? makeKetoAdaptedIngredients(recipe) : baseIngredients;
     return scaleIngredients(base, multiplier);
-  }, [recipe, multiplier, omad, ketoAdapt]);
+  }, [recipe, baseIngredients, hasCuratedVariant, multiplier, omad, ketoAdapt]);
 
   if (!recipe) return notFound();
 
   const ketoFriendly = isKetoFriendly(recipe);
-  const nutrition = omad
+  const nutrition = omad || ketoAdapt || (hasCuratedVariant && variant === "keto")
     ? nutritionForIngredients(displayedIngredients)
-    : ketoAdapt
-      ? nutritionForIngredients(displayedIngredients)
-      : recipeScaledNutrition(recipe, multiplier);
+    : recipeScaledNutrition(recipe, multiplier);
   const method = recipe.methods[methodIdx];
 
   async function toggleFavorite() {
@@ -85,14 +92,54 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
 
       <div className="flex flex-wrap gap-1.5 text-[11px] mb-6">
         <Badge>{CATEGORY_LABELS[recipe.category]}</Badge>
-        {recipe.dietType.includes("keto") && <Badge accent>{ketoFriendly ? "KETO" : "LOW-CARB"}</Badge>}
-        {!recipe.dietType.includes("keto") && recipe.dietType.includes("low-carb") && <Badge accent>LOW-CARB</Badge>}
+        {hasCuratedVariant ? (
+          variant === "keto" && (
+            nutrition.netCarbs <= KETO_NET_CARB_LIMIT_G
+              ? <Badge accent>KETO</Badge>
+              : <Badge accent>LOW-CARB</Badge>
+          )
+        ) : (
+          <>
+            {recipe.dietType.includes("keto") && <Badge accent>{ketoFriendly ? "KETO" : "LOW-CARB"}</Badge>}
+            {!recipe.dietType.includes("keto") && recipe.dietType.includes("low-carb") && <Badge accent>LOW-CARB</Badge>}
+          </>
+        )}
         {recipe.dairyFree && <Badge>БЕЗ МЛЕЧНИ</Badge>}
         {!recipe.dairyFree && <Badge>СЪДЪРЖА МЛЕЧНИ</Badge>}
         {recipe.omadCompatible && <Badge>OMAD подходящо</Badge>}
       </div>
 
-      {!ketoFriendly && !ketoAdapt && !omad && (
+      {hasCuratedVariant && (
+        <div className="mb-4 rounded-xl border px-4 py-3" style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}>
+          <div className="flex flex-wrap items-center gap-2 mb-1">
+            <button onClick={() => setVariant("normal")}
+              className="px-4 py-2 rounded-full text-xs font-semibold border shrink-0"
+              style={{
+                borderColor: "var(--nk-border)",
+                background: variant === "normal" ? "var(--nk-ember)" : "transparent",
+                color: variant === "normal" ? "#FBF3E7" : "var(--nk-fg)",
+              }}>
+              НОРМАЛНА ВЕРСИЯ
+            </button>
+            <button onClick={() => setVariant("keto")}
+              className="px-4 py-2 rounded-full text-xs font-semibold border shrink-0"
+              style={{
+                borderColor: "var(--nk-border)",
+                background: variant === "keto" ? "var(--nk-olive)" : "transparent",
+                color: variant === "keto" ? "#FBF3E7" : "var(--nk-fg)",
+              }}>
+              КЕТО / ЛОУ-КАРБ ВЕРСИЯ
+            </button>
+          </div>
+          <p className="text-xs" style={{ color: "var(--nk-fg-soft)" }}>
+            {variant === "keto"
+              ? (recipe.ketoVariant?.note ?? "Адаптирана версия с намалени въглехидрати.")
+              : "Автентичната българска рецепта, както се готви традиционно."}
+          </p>
+        </div>
+      )}
+
+      {!hasCuratedVariant && !recipe.noKetoAdapt && !ketoFriendly && !ketoAdapt && !omad && (
         <div className="mb-4 rounded-xl border px-4 py-3 text-xs flex items-center justify-between gap-3"
           style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}>
           <span>
@@ -105,7 +152,7 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
           </button>
         </div>
       )}
-      {ketoAdapt && (
+      {!hasCuratedVariant && ketoAdapt && (
         <div className="mb-4 rounded-xl border px-4 py-3 text-xs flex items-center justify-between gap-3"
           style={{ borderColor: "var(--nk-border)", background: "var(--nk-bg-2)" }}>
           <span>
