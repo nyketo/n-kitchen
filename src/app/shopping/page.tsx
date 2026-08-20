@@ -8,11 +8,11 @@ import type { IngredientCategory } from "@/data/ingredients";
 
 const CATEGORY_ICON: Record<IngredientCategory, string> = {
   meat: "🥩", fish: "🐟", egg: "🥚", vegetable: "🥬", fruit: "🍋", fat: "🫒",
-  spice: "🧂", nut: "🌰", sweetener: "🍯", flour: "🌾", dairy: "🧀", other: "📦",
+  spice: "🧂", nut: "🌰", sweetener: "🍯", flour: "🌾", grain: "🌾", dairy: "🧀", other: "📦",
 };
 const CATEGORY_LABEL: Record<IngredientCategory, string> = {
   meat: "Месо", fish: "Риба", egg: "Яйца", vegetable: "Зеленчуци", fruit: "Плодове", fat: "Мазнини",
-  spice: "Подправки", nut: "Ядки", sweetener: "Подсладители", flour: "Брашна", dairy: "Млечни", other: "Друго",
+  spice: "Подправки", nut: "Ядки", sweetener: "Подсладители", flour: "Брашна", grain: "Зърнени/тесто", dairy: "Млечни", other: "Друго",
 };
 
 export default function ShoppingPage() {
