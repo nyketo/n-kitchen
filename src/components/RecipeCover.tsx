@@ -1,4 +1,5 @@
 import type { MealCategory } from "@/lib/types";
+import { CategoryArt } from "./CategoryArt";
 
 const GRADIENTS: Record<MealCategory, string> = {
   pork: "linear-gradient(155deg,#C5623A 0%,#9C4A28 45%,#6B2E17 100%)",
@@ -19,12 +20,6 @@ const GRADIENTS: Record<MealCategory, string> = {
   bulgarian: "linear-gradient(155deg,#9C4A28 0%,#C5623A 45%,#6B2E17 100%)",
 };
 
-const ICONS: Record<MealCategory, string> = {
-  pork: "🐖", beef: "🐄", chicken: "🐔", minced: "🍖", mackerel: "🐟", "other-fish": "🐟",
-  eggs: "🥚", soups: "🥣", stews: "🍲", salads: "🥗", desserts: "🍮", bread: "🍞",
-  pizza: "🍕", sauces: "🫙", cabbage: "🥬", bulgarian: "🇧🇬",
-};
-
 export default function RecipeCover({
   category,
   title,
@@ -34,11 +29,11 @@ export default function RecipeCover({
   title?: string;
   className?: string;
 }) {
-  const monogram = title?.trim()?.[0]?.toUpperCase() ?? "N";
   return (
     <div
-      className={`relative flex items-end justify-start overflow-hidden ${className ?? ""}`}
+      className={`relative flex items-center justify-center overflow-hidden ${className ?? ""}`}
       style={{ background: GRADIENTS[category] ?? GRADIENTS.bulgarian }}
+      title={title}
     >
       {/* subtle linen/paper texture */}
       <div
@@ -53,29 +48,17 @@ export default function RecipeCover({
         className="absolute inset-0 opacity-40"
         style={{ backgroundImage: "radial-gradient(circle at 25% 15%, rgba(255,255,255,0.35) 0, transparent 55%)" }}
       />
+      {/* themed hand-drawn sketch — this IS the cover art now, filling the box in place of the
+          old flat solid-color field (not a small corner badge). Replaces both the old giant
+          monogram letter and the emoji badge (whose flag glyph silently rendered as literal
+          "BG" text on Windows Chrome). */}
+      <div className="absolute inset-0 p-3 md:p-4 drop-shadow-sm">
+        <CategoryArt category={category} />
+      </div>
       <div
-        className="absolute inset-0 opacity-60"
-        style={{ backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 55%)" }}
+        className="absolute inset-x-0 bottom-0 h-10 opacity-70"
+        style={{ backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 100%)" }}
       />
-      {/* large typographic monogram — the focal element instead of a photo */}
-      <span
-        className="absolute -bottom-3 -left-1 font-display select-none pointer-events-none"
-        style={{
-          fontSize: "5.5rem",
-          lineHeight: 1,
-          color: "rgba(251,243,231,0.14)",
-          fontWeight: 600,
-        }}
-        aria-hidden="true"
-      >
-        {monogram}
-      </span>
-      <span
-        className="absolute top-3 right-3 text-xl w-8 h-8 rounded-full flex items-center justify-center"
-        style={{ background: "rgba(20,12,6,0.28)", backdropFilter: "blur(2px)" }}
-      >
-        {ICONS[category]}
-      </span>
       <div
         className="absolute inset-x-0 bottom-0 h-px opacity-30"
         style={{ background: "linear-gradient(to right, transparent, rgba(251,243,231,0.6), transparent)" }}
